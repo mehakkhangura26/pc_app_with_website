@@ -3,168 +3,196 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PC Optimum Campaign</title>
+<title>PC Optimum</title>
+
 <style>
-/* --- styles copied from before --- */
-*{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;background-color:#f5f5f5;}
-.header{background:linear-gradient(135deg,#D71920 0%,#B91419 100%);color:white;padding:15px 20px;display:flex;justify-content:space-between;align-items:center;}
-.tab-bar{background:white;display:flex;border-bottom:2px solid #e0e0e0;}
-.tab{flex:1;text-align:center;padding:15px;font-size:16px;color:#666;cursor:pointer;border-bottom:3px solid transparent;transition:all 0.3s;}
-.tab.active{color:#D71920;border-bottom:3px solid #D71920;font-weight:600;}
-.points-summary{background:white;padding:25px 20px;margin-bottom:10px;}
-.greeting{font-size:14px;color:#666;margin-bottom:5px;}
-.points-total{font-size:32px;font-weight:bold;color:#333;margin-bottom:5px;}
-.redeemable{display:flex;align-items:center;gap:5px;margin-top:8px;font-size:13px;color:#D71920;}
-.campaign-banner{background:linear-gradient(135deg,#7B2CBF 0%,#5A189A 100%);margin:10px 20px;padding:25px 20px;border-radius:12px;color:white;cursor:pointer;transition:all 0.3s;position:relative;overflow:hidden;}
-.campaign-banner:hover{transform:translateY(-2px);}
-.banner-emoji{font-size:36px;margin-bottom:10px;}
-.banner-title{font-size:24px;font-weight:bold;margin-bottom:8px;}
-.banner-hashtag{font-size:20px;font-weight:bold;color:#FFD700;margin-bottom:8px;}
-.banner-subtitle{font-size:14px;opacity:0.9;margin-bottom:12px;}
-.banner-cta{display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:white;background:rgba(255,255,255,0.2);padding:8px 16px;border-radius:20px;}
-.campaign-modal{position:fixed;top:0;left:0;right:0;bottom:0;background:white;z-index:1000;overflow-y:auto;display:none;animation:slideUp 0.4s ease-out;}
-.campaign-modal.active{display:block;}
-@keyframes slideUp{from{transform:translateY(100%);}to{transform:translateY(0);}}
-.modal-header{background:linear-gradient(135deg,#7B2CBF 0%,#5A189A 100%);color:white;padding:20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
-.back-btn{font-size:24px;cursor:pointer;padding:5px;}
-.modal-title{font-size:18px;font-weight:600;}
-.modal-points{font-size:16px;color:#FFD700;}
-.campaign-content{padding:30px 20px;}
-.stage-title{font-size:28px;font-weight:bold;color:#7B2CBF;text-align:center;margin-bottom:10px;}
-.stage-subtitle{font-size:16px;color:#666;text-align:center;margin-bottom:40px;}
-.grocery-list{max-width:400px;margin:0 auto 40px;background:#f9f9f9;padding:25px;border-radius:12px;}
-.list-item{display:flex;align-items:center;padding:15px;margin:10px 0;background:white;border-radius:8px;font-size:18px;}
-.checkmark{font-size:24px;width:40px;font-weight:bold;}
-.check-green{color:#2E7D32;}
-.check-red{color:#7B2CBF;}
-.item-text{flex:1;}
-.missing{color:#7B2CBF;font-weight:bold;cursor:pointer;transition:all 0.3s;}
-.missing:hover{color:#5A189A;transform:scale(1.05);}
-.btn{background:#7B2CBF;color:white;border:none;padding:15px 40px;font-size:16px;font-weight:600;border-radius:25px;cursor:pointer;transition:all 0.3s;box-shadow:0 4px 12px rgba(123,44,191,0.3);}
-.btn:hover{background:#5A189A;transform:translateY(-2px);}
-.hidden{display:none;}
-.quiz-container{max-width:700px;margin:0 auto;padding:30px 20px;}
-.quiz-question{background:white;padding:30px;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.1);}
-.question-title{font-size:20px;color:#333;font-weight:600;margin-bottom:25px;line-height:1.4;}
-.quiz-options{display:flex;flex-direction:column;gap:12px;}
-.quiz-option{background:#f9f9f9;padding:15px 20px;border-radius:8px;border:2px solid transparent;cursor:pointer;transition:all 0.3s;font-size:16px;}
-.quiz-option:hover{background:#f0f0f0;border-color:#7B2CBF;}
-.quiz-option.selected{background:#F3E5FF;border-color:#7B2CBF;color:#5A189A;font-weight:600;}
-.quiz-nav{text-align:center;margin-top:30px;}
+/* === BASE STYLES (unchanged) === */
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;background:#f5f5f5;min-height:100vh}
+
+/* Header */
+.header{background:linear-gradient(135deg,#D71920,#B91419);color:white;padding:15px 20px;display:flex;justify-content:space-between;align-items:center}
+.tab-bar{background:white;display:flex;border-bottom:2px solid #e0e0e0}
+.tab{flex:1;text-align:center;padding:15px;color:#666}
+.tab.active{color:#D71920;font-weight:600;border-bottom:3px solid #D71920}
+
+.points-summary{background:white;padding:25px 20px}
+.points-total{font-size:32px;font-weight:bold}
+.redeemable{margin-top:8px;color:#D71920}
+
+/* Campaign Banner */
+.campaign-banner{
+background:linear-gradient(135deg,#7B2CBF,#5A189A);
+margin:20px;
+padding:25px;
+border-radius:12px;
+color:white;
+cursor:pointer;
+box-shadow:0 4px 12px rgba(123,44,191,.3)
+}
+.banner-emoji{font-size:36px}
+.banner-title{font-size:22px;font-weight:bold;margin:6px 0}
+.banner-subtitle{font-size:14px;opacity:.9}
+.banner-cta{margin-top:10px;font-weight:600}
+
+/* Modal */
+.campaign-modal{position:fixed;inset:0;background:white;display:none;z-index:1000}
+.campaign-modal.active{display:block}
+.modal-header{background:linear-gradient(135deg,#7B2CBF,#5A189A);color:white;padding:20px;display:flex;justify-content:space-between}
+.back-btn{cursor:pointer;font-size:22px}
+
+.hidden{display:none}
+
+/* Quiz */
+.quiz-container{max-width:700px;margin:0 auto;padding:30px}
+.quiz-question{background:white;padding:30px;border-radius:12px}
+.question-title{font-size:20px;font-weight:600;margin-bottom:25px}
+.quiz-option{background:#f9f9f9;padding:15px;border-radius:8px;margin-bottom:10px;cursor:pointer}
+.quiz-option.selected{background:#F3E5FF;border:2px solid #7B2CBF}
+
+.progress-bar{height:8px;background:#ddd;border-radius:10px;overflow:hidden}
+.progress-fill{height:100%;width:0%;background:linear-gradient(90deg,#7B2CBF,#5A189A)}
+
+.btn{background:#7B2CBF;color:white;border:none;padding:15px 40px;border-radius:25px;font-weight:600;cursor:pointer}
+.btn:disabled{background:#ccc}
+.btn-white{background:white;color:#7B2CBF}
 </style>
 </head>
+
 <body>
 
-<div class="header">
-  <div class="greeting">Good afternoon, J</div>
-  <div class="redeemable">💎 Redeemable value $175</div>
+<div id="mainApp">
+  <div class="header">
+    <div>9:52</div>
+    <div>📶 🔋</div>
+  </div>
+
+  <div class="tab-bar">
+    <div class="tab">Rewards</div>
+    <div class="tab active">Transactions</div>
+  </div>
+
+  <div class="points-summary">
+    <div class="points-total">
+      175,308<span style="font-size:18px">pts</span>
+    </div>
+    <div class="redeemable">💎 Redeemable value $175</div>
+  </div>
+
+  <div class="campaign-banner" onclick="openCampaign()">
+    <div class="banner-emoji">🧠</div>
+    <div class="banner-title">#KnowYourList</div>
+    <div class="banner-subtitle">Learn about Alzheimer’s awareness</div>
+    <div class="banner-cta">Start Campaign →</div>
+  </div>
 </div>
 
-<div class="campaign-banner" onclick="openCampaign()">
-  <div class="banner-emoji">🧠</div>
-  <div class="banner-hashtag">#KnowYourList</div>
-  <div class="banner-title">The List Worth Noticing</div>
-  <div class="banner-subtitle">Learn about Alzheimer's awareness and earn 500 points</div>
-  <div class="banner-cta">Start Campaign →</div>
-</div>
-
+<!-- MODAL -->
 <div class="campaign-modal" id="campaignModal">
+
   <div class="modal-header">
     <div class="back-btn" onclick="closeCampaign()">←</div>
-    <div class="modal-title">#KnowYourList</div>
-    <div class="modal-points" id="modalPoints">0 pts</div>
+    <div>#KnowYourList</div>
+    <div id="modalPoints">0 pts</div>
   </div>
-  <div class="campaign-content">
 
-    <div id="stage1">
-      <div class="stage-title">#KnowYourList</div>
-      <div class="stage-subtitle">Check your shopping list</div>
-      <div class="grocery-list">
-        <div class="list-item"><span class="checkmark check-green">✓</span><span class="item-text">Eggs</span></div>
-        <div class="list-item"><span class="checkmark check-green">✓</span><span class="item-text">Milk</span></div>
-        <div class="list-item" id="missingItem"><span class="checkmark check-red">✖</span><span class="item-text missing">Bread</span></div>
+  <!-- STAGE 4: QUIZ -->
+  <div id="stage4">
+    <div class="quiz-container">
+
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressBar"></div>
       </div>
-      <div class="btn" onclick="nextStage(2)">I see the missing item</div>
-    </div>
-
-    <div id="stage2" class="hidden">
-      <div class="stage-title">Awareness</div>
-      <div class="stage-subtitle">Sometimes missing items mean more than groceries</div>
-      <button class="btn" onclick="nextStage(3)">Learn More</button>
-    </div>
-
-    <div id="stage3" class="hidden">
-      <div class="stage-title">Quick Quiz</div>
-      <div class="quiz-container">
-        <div id="quizQuestion" class="quiz-question"></div>
-        <div class="quiz-options" id="quizOptions"></div>
-        <div class="quiz-nav"><button class="btn" id="nextBtn" onclick="nextQuestion()" disabled>Next</button></div>
+      <div style="text-align:center;margin:10px 0">
+        Question <span id="currentQ">0</span> of <span id="totalQ">7</span>
       </div>
-    </div>
 
-    <div id="stage4" class="hidden">
-      <div class="stage-title">Congrats! 🎉</div>
-      <div class="stage-subtitle">You’ve completed the awareness quiz and earned 500 points</div>
-      <div class="btn" onclick="closeCampaign()">Close</div>
-    </div>
+      <!-- START SCREEN -->
+      <div class="quiz-question" id="quizContent">
+        <div class="question-title">
+          Please click <strong>Next</strong> to start the quiz
+        </div>
 
+        <div class="campaign-banner"
+             onclick="window.open('https://jkardam2001.wixsite.com/the-list-worth-notic','_blank')">
+          <div class="banner-emoji">🌐</div>
+          <div class="banner-title">The List Worth Noticing</div>
+          <div class="banner-subtitle">
+            Learn more about Alzheimer’s awareness
+          </div>
+          <div class="banner-cta">Visit Website →</div>
+        </div>
+      </div>
+
+      <div style="text-align:center;margin-top:30px">
+        <button class="btn" id="nextBtn" onclick="nextQuestion()">Start Quiz</button>
+      </div>
+
+    </div>
   </div>
 </div>
 
 <script>
-// --- modal functions ---
-function openCampaign(){document.getElementById('campaignModal').classList.add('active');}
-function closeCampaign(){document.getElementById('campaignModal').classList.remove('active');}
-function nextStage(stage){
-  ['stage1','stage2','stage3','stage4'].forEach(s=>document.getElementById(s).classList.add('hidden'));
-  document.getElementById('stage'+stage).classList.remove('hidden');
-}
+let campaignPoints = 0;
+let mainPoints = 175308;
+let currentQuestion = -1;
+let userAnswers = [];
 
-// --- quiz questions ---
-const quizData = [
-  {q:"Have you noticed items missing from your shopping list?", options:["Yes","No","Sometimes","Not sure"]},
-  {q:"Do you check in with family members about daily tasks?", options:["Yes","No","Occasionally","Rarely"]},
-  {q:"Do you find it difficult to recall recent conversations?", options:["Often","Sometimes","Rarely","Never"]},
-  {q:"Have you experienced confusion with dates or seasons?", options:["Yes","No","Occasionally","Not sure"]},
-  {q:"Do you seek medical advice when memory issues arise?", options:["Yes","No","Sometimes","Not yet"]}
+const quizQuestions = [
+ {question:"Have you noticed any recent changes in your ability to remember new information?",type:"single",options:["Yes","No"]},
+ {question:"How confident are you in recognizing early signs of cognitive decline?",options:["Very Confident","Confident","Not Sure"]},
+ {question:"If a friend or family member expressed memory concerns, what would you recommend?",type:"multiple",options:["See a Doctor","Ignore-It's Normal Aging","Moniter"]}
 ];
-let currentQ = 0;
 
-function loadQuestion(){
-  const question = quizData[currentQ];
-  document.getElementById('quizQuestion').innerHTML = question.q;
-  const optionsDiv = document.getElementById('quizOptions');
-  optionsDiv.innerHTML = '';
-  question.options.forEach((opt,i)=>{
-    const div = document.createElement('div');
-    div.className = 'quiz-option';
-    div.innerText = opt;
-    div.onclick = ()=>{selectOption(div)};
-    optionsDiv.appendChild(div);
-  });
-  document.getElementById('nextBtn').disabled = true;
+function openCampaign(){
+ document.getElementById('campaignModal').classList.add('active');
 }
 
-function selectOption(div){
-  document.querySelectorAll('.quiz-option').forEach(o=>o.classList.remove('selected'));
-  div.classList.add('selected');
-  document.getElementById('nextBtn').disabled = false;
+function closeCampaign(){
+ document.getElementById('campaignModal').classList.remove('active');
 }
 
 function nextQuestion(){
-  currentQ++;
-  if(currentQ < quizData.length){
-    loadQuestion();
-  } else {
-    nextStage(4); // finish
-  }
+ currentQuestion++;
+
+ if(currentQuestion >= quizQuestions.length){
+   completeQuiz();
+   return;
+ }
+
+ loadQuestion(currentQuestion);
 }
 
-// load first question when entering stage3
-document.getElementById('stage3').addEventListener('transitionend', ()=>{
-  if(!document.getElementById('stage3').classList.contains('hidden')) loadQuestion();
-});
+function loadQuestion(i){
+ const q = quizQuestions[i];
+ let html = `<div class="question-title">${q.question}</div><div>`;
+ q.options.forEach((opt,idx)=>{
+   html+=`<div class="quiz-option" onclick="selectOption(this,${idx})">${opt}</div>`;
+ });
+ html+=`</div>`;
+ document.getElementById('quizContent').innerHTML = html;
+
+ document.getElementById('currentQ').textContent = i+1;
+ document.getElementById('totalQ').textContent = quizQuestions.length;
+ document.getElementById('progressBar').style.width=((i+1)/quizQuestions.length*100)+'%';
+ document.getElementById('nextBtn').textContent = "Next Question";
+}
+
+function selectOption(el,val){
+ document.querySelectorAll('.quiz-option').forEach(o=>o.classList.remove('selected'));
+ el.classList.add('selected');
+}
+
+function completeQuiz(){
+ campaignPoints=500;
+ mainPoints+=500;
+ document.getElementById('modalPoints').textContent="500 pts";
+ document.querySelector('.points-total').innerHTML =
+ mainPoints.toLocaleString()+`<span style="font-size:18px">pts</span>`;
+ alert("🎉 500 Points Earned!");
+ closeCampaign();
+}
 </script>
+
 </body>
 </html>
