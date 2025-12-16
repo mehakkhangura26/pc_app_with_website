@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PC Optimum</title>
+
+<style>
+/* === BASE STYLES (unchanged) === */
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;background:#f5f5f5;min-height:100vh}
+
+/* Header */
+.header{background:linear-gradient(135deg,#D71920,#B91419);color:white;padding:15px 20px;display:flex;justify-content:space-between;align-items:center}
+.tab-bar{background:white;display:flex;border-bottom:2px solid #e0e0e0}
+.tab{flex:1;text-align:center;padding:15px;color:#666}
+.tab.active{color:#D71920;font-weight:600;border-bottom:3px solid #D71920}
+
+.points-summary{background:white;padding:25px 20px}
+.points-total{font-size:32px;font-weight:bold}
+.redeemable{margin-top:8px;color:#D71920}
+
+/* Campaign Banner */
+.campaign-banner{
+background:linear-gradient(135deg,#7B2CBF,#5A189A);
+margin:20px;
+padding:25px;
+border-radius:12px;
+color:white;
+cursor:pointer;
+box-shadow:0 4px 12px rgba(123,44,191,.3)
+}
+.banner-emoji{font-size:36px}
+.banner-title{font-size:22px;font-weight:bold;margin:6px 0}
+.banner-subtitle{font-size:14px;opacity:.9}
+.banner-cta{margin-top:10px;font-weight:600}
+
+/* Modal */
+.campaign-modal{position:fixed;inset:0;background:white;display:none;z-index:1000}
+.campaign-modal.active{display:block}
+.modal-header{background:linear-gradient(135deg,#7B2CBF,#5A189A);color:white;padding:20px;display:flex;justify-content:space-between}
+.back-btn{cursor:pointer;font-size:22px}
+
+.hidden{display:none}
+
+/* Quiz */
+.quiz-container{max-width:700px;margin:0 auto;padding:30px}
+.quiz-question{background:white;padding:30px;border-radius:12px}
+.question-title{font-size:20px;font-weight:600;margin-bottom:25px}
+.quiz-option{background:#f9f9f9;padding:15px;border-radius:8px;margin-bottom:10px;cursor:pointer}
+.quiz-option.selected{background:#F3E5FF;border:2px solid #7B2CBF}
+
+.progress-bar{height:8px;background:#ddd;border-radius:10px;overflow:hidden}
+.progress-fill{height:100%;width:0%;background:linear-gradient(90deg,#7B2CBF,#5A189A)}
+
+.btn{background:#7B2CBF;color:white;border:none;padding:15px 40px;border-radius:25px;font-weight:600;cursor:pointer}
+.btn:disabled{background:#ccc}
+.btn-white{background:white;color:#7B2CBF}
+</style>
+</head>
+
+<body>
+
+<div id="mainApp">
+  <div class="header">
+    <div>9:52</div>
+    <div>📶 🔋</div>
+  </div>
+
+  <div class="tab-bar">
+    <div class="tab">Rewards</div>
+    <div class="tab active">Transactions</div>
+  </div>
+
+  <div class="points-summary">
+    <div class="points-total">
+      175,308<span style="font-size:18px">pts</span>
+    </div>
+    <div class="redeemable">💎 Redeemable value $175</div>
+  </div>
+
+  <div class="campaign-banner" onclick="openCampaign()">
+    <div class="banner-emoji">🧠</div>
+    <div class="banner-title">#KnowYourList</div>
+    <div class="banner-subtitle">Learn about Alzheimer’s awareness</div>
+    <div class="banner-cta">Start Campaign →</div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="campaign-modal" id="campaignModal">
+
+  <div class="modal-header">
+    <div class="back-btn" onclick="closeCampaign()">←</div>
+    <div>#KnowYourList</div>
+    <div id="modalPoints">0 pts</div>
+  </div>
+
+  <!-- STAGE 4: QUIZ -->
+  <div id="stage4">
+    <div class="quiz-container">
+
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressBar"></div>
+      </div>
+      <div style="text-align:center;margin:10px 0">
+        Question <span id="currentQ">0</span> of <span id="totalQ">7</span>
+      </div>
+
+      <!-- START SCREEN -->
+      <div class="quiz-question" id="quizContent">
+        <div class="question-title">
+          Please click <strong>Next</strong> to start the quiz
+        </div>
+
+        <div class="campaign-banner"
+             onclick="window.open('https://jkardam2001.wixsite.com/the-list-worth-noticing','_blank')">
+          <div class="banner-emoji">🌐</div>
+          <div class="banner-title">The List Worth Noticing</div>
+          <div class="banner-subtitle">
+            Learn more about Alzheimer’s awareness
+          </div>
+          <div class="banner-cta">Visit Website →</div>
+        </div>
+      </div>
+
+      <div style="text-align:center;margin-top:30px">
+        <button class="btn" id="nextBtn" onclick="nextQuestion()">Start Quiz</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+let campaignPoints = 0;
+let mainPoints = 175308;
+let currentQuestion = -1;
+let userAnswers = [];
+
+const quizQuestions = [
+ {question:"Forgetting names occasionally is always Alzheimer’s.",type:"single",options:["True","False"]},
+ {question:"What should you do if concerned?",type:"single",options:["Ignore","See your doctor","Wait years"]},
+ {question:"Which are brain-healthy habits?",type:"multiple",options:["Exercise","Sleep","Learning","Socializing"]}
+];
+
+function openCampaign(){
+ document.getElementById('campaignModal').classList.add('active');
+}
+
+function closeCampaign(){
+ document.getElementById('campaignModal').classList.remove('active');
+}
+
+function nextQuestion(){
+ currentQuestion++;
+
+ if(currentQuestion >= quizQuestions.length){
+   completeQuiz();
+   return;
+ }
+
+ loadQuestion(currentQuestion);
+}
+
+function loadQuestion(i){
+ const q = quizQuestions[i];
+ let html = `<div class="question-title">${q.question}</div><div>`;
+ q.options.forEach((opt,idx)=>{
+   html+=`<div class="quiz-option" onclick="selectOption(this,${idx})">${opt}</div>`;
+ });
+ html+=`</div>`;
+ document.getElementById('quizContent').innerHTML = html;
+
+ document.getElementById('currentQ').textContent = i+1;
+ document.getElementById('totalQ').textContent = quizQuestions.length;
+ document.getElementById('progressBar').style.width=((i+1)/quizQuestions.length*100)+'%';
+ document.getElementById('nextBtn').textContent = "Next Question";
+}
+
+function selectOption(el,val){
+ document.querySelectorAll('.quiz-option').forEach(o=>o.classList.remove('selected'));
+ el.classList.add('selected');
+}
+
+function completeQuiz(){
+ campaignPoints=500;
+ mainPoints+=500;
+ document.getElementById('modalPoints').textContent="500 pts";
+ document.querySelector('.points-total').innerHTML =
+ mainPoints.toLocaleString()+`<span style="font-size:18px">pts</span>`;
+ alert("🎉 500 Points Earned!");
+ closeCampaign();
+}
+</script>
+
+</body>
+</html>
